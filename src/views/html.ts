@@ -11,5 +11,6 @@ export const wrapIntoHtml = (body: string) => `<!DOCTYPE html>
   </head>
   <body>
     <div id="root">${body}</div>
+    <p>IP address data powered by <a href="https://ipinfo.io">IPinfo</a></p>
   </body>
 </html>`;

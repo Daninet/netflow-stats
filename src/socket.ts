@@ -14,12 +14,7 @@ export const startUdpSocket = (callback: (msg: Buffer) => void) => {
 
   server.on("listening", () => {
     const address = server.address();
-    const port = address.port;
-    const family = address.family;
-    const ipaddr = address.address;
-    console.log(`Server is listening at port${port}`);
-    console.log(`Server ip:${ipaddr}`);
-    console.log(`Server is IP4/IP6 : ${family}`);
+    console.log(`Server is listening at UDP port ${address.port}`);
   });
 
   server.on("close", () => {

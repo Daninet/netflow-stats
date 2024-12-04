@@ -10,9 +10,9 @@ import { Store } from "./store.js";
 import { ServerContext } from "./types.js";
 import { renderRoute } from "./routes.js";
 
-export async function main() {
-  const server = Fastify({ logger: true });
+const server = Fastify({ logger: false });
 
+export async function main() {
   const __dirname = dirname(__filename);
 
   const store = new Store();
@@ -48,9 +48,28 @@ export async function main() {
 
 main().then(async (server) => {
   try {
-    await server.listen({ port: 3000 });
+    await server.listen({ host: "0.0.0.0", port: 3000 });
   } catch (err) {
     server.log.error(err);
     process.exit(1);
   }
 });
+
+function gracefulShutdown() {
+  console.log("Shutting down gracefully...");
+
+  server.close(() => {
+    console.log("Server closed.");
+    process.exit(0);
+  });
+
+  setTimeout(() => {
+    console.error(
+      "Could not close connections in time, forcefully shutting down"
+    );
+    process.exit(1);
+  }, 5000);
+}
+
+process.on("SIGTERM", gracefulShutdown);
+process.on("SIGINT", gracefulShutdown);
